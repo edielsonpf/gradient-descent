@@ -24,7 +24,7 @@ class BatchClass(object):
     def __RandomlySelect(self,num_observations):
         return np.random.randint(0,num_observations-1,1)
     
-    def __leastSquares(self,theta,x,y):
+    def Loss(self,theta,x,y):
         
         leastSquares = 0
         for i in range(len(x)):
@@ -45,7 +45,7 @@ class BatchClass(object):
         theta = np.random.normal(mu, sigma, numFeat)
         
         lsq=[]
-        lsq.append(self.__leastSquares(theta, x, y))
+        lsq.append(self.Loss(theta, x, y))
         
         numEpochs=numEpochs+1
         
@@ -61,10 +61,12 @@ class BatchClass(object):
                 gradJ = gradJ + (np.dot(x[RndObs],np.matrix(theta).transpose())-y[RndObs])*x[RndObs]
             gradJ=gradJ/len(x)
             
-            #Finding the new theta        
-            theta=theta-step_lenght*gradJ
+            alpha_k=step_lenght
             
-            lsq.append(self.__leastSquares(theta, x, y))
+            #Finding the new theta        
+            theta=theta-alpha_k*gradJ
+            
+            lsq.append(self.Loss(theta, x, y))
             numEpochs=numEpochs+1
             threshold = np.sqrt((lsq[numEpochs-1]-lsq[numEpochs-2])**2)
             
