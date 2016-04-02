@@ -16,7 +16,7 @@ def StochasticTest(Xtrain,Ytrain,Xtest,Ytest):
     print ('Number of features: %s'%numFeat)
     
     stepLen = 1.0/128
-    minThreshold=1e-10
+    minThreshold=1e-8
     maxEpoc = numObs*0.3
     
     StochasticHandle = StochasticClass()
