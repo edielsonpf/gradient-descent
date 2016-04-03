@@ -1,4 +1,4 @@
-from GradientDescent.Batch import BatchClass
+from GradientDescent.LinearLeastSquare import LLSClass
 import matplotlib.pyplot as plt
 
 def BatchTest(Xtrain,Ytrain,Xtest,Ytest):
@@ -19,9 +19,9 @@ def BatchTest(Xtrain,Ytrain,Xtest,Ytest):
     minThreshold=1e-5
     maxEpoc = 30
     
-    BachHandle = BatchClass()
+    BachHandle = LLSClass()
     print('Starting training procedure...')
-    Model,numEpoc, Lsq = BachHandle.train(stepLen, minThreshold, maxEpoc, Xtrain, Ytrain)
+    Model,numEpoc, Lsq = BachHandle.trainBatch(stepLen, minThreshold, maxEpoc, Xtrain, Ytrain)
     print('Done!\n')
     x = [i+1 for i in range(numEpoc)]
     plt.plot(x, Lsq)

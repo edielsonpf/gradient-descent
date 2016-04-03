@@ -1,4 +1,4 @@
-from GradientDescent.Stochastic import StochasticClass
+from GradientDescent.LinearLeastSquare import LLSClass
 import matplotlib.pyplot as plt
 
 def StochasticTest(Xtrain,Ytrain,Xtest,Ytest):
@@ -19,9 +19,9 @@ def StochasticTest(Xtrain,Ytrain,Xtest,Ytest):
     minThreshold=1e-8
     maxEpoc = numObs*0.3
     
-    StochasticHandle = StochasticClass()
+    StochasticHandle = LLSClass()
     print('Starting training procedure...')
-    Model,numEpoc, Lsq = StochasticHandle.train(stepLen, minThreshold, maxEpoc, Xtrain, Ytrain)
+    Model,numEpoc, Lsq = StochasticHandle.trainStochastisc(stepLen, minThreshold, maxEpoc, Xtrain, Ytrain)
     print('Done!\n')
     x = [i+1 for i in range(numEpoc)]
     plt.plot(x, Lsq)
