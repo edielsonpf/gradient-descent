@@ -1,6 +1,6 @@
 from Tools import LoadCSV
-from BachTest import BatchTest
-from StochasticTest import StochasticTest 
+from LinearLeastSquaresTest import LinearLeastSquaresTest
+from LogisticRegressionTest import LogisticRegressionTest
 
 ###
 #
@@ -16,7 +16,7 @@ Xtest = LoadCSV('data/Xtest.csv', 50)
 Ytest = LoadCSV('data/Ytest.csv', 1)
 
 print('Batch gradient descent algorithm \n')
-BatchTest(Xtrain, Ytrain, Xtest, Ytest)
+# LinearLeastSquaresTest(Xtrain, Ytrain, Xtest, Ytest)
 
 print('Stochastic gradient descent algorithm \n')
-StochasticTest(Xtrain, Ytrain, Xtest, Ytest)
+LogisticRegressionTest(Xtrain, Ytrain, Xtest, Ytest)

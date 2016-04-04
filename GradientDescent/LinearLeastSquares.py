@@ -15,7 +15,7 @@ class LLSClass(object):
         '''
         Constructor
         '''
-    def __Sigmoid(self,x):
+    def __Predict(self,x):
         if x >= 0:
             return 1
         else:
@@ -26,10 +26,10 @@ class LLSClass(object):
     
     def Loss(self,theta,x,y):
         
-        leastSquares = 0
+        loss = 0
         for i in range(len(x)):
-            leastSquares=leastSquares+0.5*(np.dot(x[i],np.matrix(theta).transpose())-y[i])**2
-        return np.asscalar(leastSquares/len(x))    
+            loss=loss+0.5*(np.dot(x[i],np.matrix(theta).transpose())-y[i])**2
+        return np.asscalar(loss/len(x))    
         
     def trainBatch(self,step_lenght,min_threshold,max_epochs,x,y):
             
@@ -101,12 +101,16 @@ class LLSClass(object):
         
             print('Epoch: %s'%numEpochs)
             print('Least squares: %g'%lsq[numEpochs-1])
+            
             #Calculating the gradient of J             
-            RndObs = self.__RandomlySelect(numObs)
-            g_k=(np.dot(x[RndObs],np.matrix(theta).transpose())-y[RndObs])*x[RndObs]
-            alpha_k=step_lenght/(np.sqrt(numEpochs))
-            #Finding the new theta        
-            theta=theta-alpha_k*g_k
+            for i in range(numObs):
+                RndObs = self.__RandomlySelect(numObs)
+                g_k=(np.dot(x[RndObs],np.matrix(theta).transpose())-y[RndObs])*x[RndObs]
+
+                alpha_k=step_lenght/(np.sqrt((i+1)*(numEpochs)))
+                
+                #Finding the new theta        
+                theta=theta-alpha_k*g_k
             
             lsq.append(self.Loss(theta, x, y))
             numEpochs=numEpochs+1
@@ -127,7 +131,7 @@ class LLSClass(object):
         success=0
         for i in range(numObs):
                 h = np.dot(x[i],np.matrix(theta).transpose())
-                prediction = self.__Sigmoid(h)
+                prediction = self.__Predict(h)
                 
                 if  prediction == y[i]:
                     success = success+1
