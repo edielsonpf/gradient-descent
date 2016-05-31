@@ -21,6 +21,7 @@ class LRClass(object):
     def __Gradient(self,Xi,Ti,Theta):
         
         #Calculating the gradient of J             
+#         gradient = (Xn*Tn)*np.asscalar((np.exp(-Tn*np.dot(Xn,np.matrix(Theta).transpose())))/(1+np.exp(-Tn*np.dot(Xn,np.matrix(Theta).transpose()))))
         gradient = (Xi*Ti)*np.asscalar((np.exp(-Ti*np.dot(Xi,np.matrix(Theta).transpose())))/(1+np.exp(-Ti*np.dot(Xi,np.matrix(Theta).transpose()))))
         return gradient
     
