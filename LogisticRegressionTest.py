@@ -24,7 +24,7 @@ def LogisticRegressionTest(Xtrain,Ytrain,Xtest,Ytest):
     
     print('Batch training procedure')
     stepLen = 1.0
-    maxEpoc = 20
+    maxEpoc = 10
     
     LLRHandle = LRClass()
     print('Starting training procedure...')
@@ -58,7 +58,7 @@ def LogisticRegressionTest(Xtrain,Ytrain,Xtest,Ytest):
     ###########################
     print('Stochastic training procedure')
     stepLen = 2.0
-    maxEpoc = 20
+    maxEpoc = 10
     
     print('Starting training procedure...')
     Model,numEpoc, Lsq = LLRHandle.trainStochastisc(stepLen, maxEpoc, Xtrain, Ytrain)

@@ -1,4 +1,7 @@
 '''
+This is the stochastic and batch gradient descent algorithms for HW1, IE 490 Machine
+Learning, Spring 2016. The loss function is for the logistic regression model.
+
 Created on Apr 3, 2016
 
 @author: Edielson
@@ -15,31 +18,35 @@ class LRClass(object):
         '''
         Constructor
         '''
+    def __Gradient(self,Xi,Ti,Theta):
         
-    def __Sigmoid(self,X): 
-        '''Compute the sigmoid function ''' 
-        den = 1.0 + np.exp(-1.0 * X) 
-        return (1.0 / den) 
+        #Calculating the gradient of J             
+        gradient = (Xi*Ti)*np.asscalar((np.exp(-Ti*np.dot(Xi,np.matrix(Theta).transpose())))/(1+np.exp(-Ti*np.dot(Xi,np.matrix(Theta).transpose()))))
+        return gradient
     
-    def __Predict(self,h):
-        if h > 0.5:
-            y=1
-        else:
-            y=-1
-        return y
+    def __Sigmoid(self,x): 
+        '''Compute the sigmoid function ''' 
+        sig = (1.0 + np.exp(-1.0 * x))**(-1)
+        return sig 
+    
+    def __Predict(self,x,Theta):
+        
+        h = self.__Sigmoid(np.dot(x,np.matrix(Theta).transpose()))
+        # h is in the range from 0 to 1. If 1, returns 1, otherwise -1
+        return round(h)*2-1
 
     def __RandomlySelect(self,num_observations):
         return np.random.randint(0,num_observations-1,1)
     
-    def Loss(self,theta,X,Y):
-        
+    def Loss(self,theta,X,T):
+        ''' This function calculates the value of the loss function considering all samples'''
         loss = 0
         for i in range(len(X)):
-#             loss=loss+np.log(1+np.exp(-Y[i]*np.dot(X[i],np.matriX(theta).transpose())))
-            loss=loss+Y[i]*np.dot(X[i],np.matrix(theta).transpose())-np.log(1 + self.__Sigmoid(np.dot(X[i],np.matrix(theta).transpose())))
-        return np.asscalar(loss/len(X))    
+            y=self.__Sigmoid(np.dot(X[i],np.matrix(theta).transpose()))
+            loss=loss+np.nan_to_num(T[i]*np.log(y)+(1-T[i])*np.log(1-y))
+        return -1.0*np.asscalar(loss)/len(X)    
         
-    def trainBatch(self,step_lenght,maX_epochs,X,Y):
+    def trainBatch(self,step_lenght,max_epochs,X,Y):
             
         #number of observations: must be disposed bY rows
         numObs = len(X)
@@ -48,9 +55,9 @@ class LRClass(object):
         # counter for the number of epochs
         numEpochs=0
                 
-#         mu, sigma = 0, 0.1 # mean and standard deviation
-#         theta = np.random.normal(mu, sigma, numFeat)
-        theta = np.zeros(numFeat)
+        mu, sigma = 0, 0.1 # mean and standard deviation
+        theta = np.random.normal(mu, sigma, numFeat)
+#       
         
         lsq=[]
         lsq.append(self.Loss(theta, X, Y))
@@ -58,7 +65,7 @@ class LRClass(object):
         numEpochs=numEpochs+1
         
         #each interaction is equivalent to one training epoch
-        while (numEpochs < maX_epochs):
+        while (numEpochs < max_epochs):
         
             print('Epoch: %s'%numEpochs)
             print('Loss: %g'%lsq[numEpochs-1])
@@ -67,7 +74,7 @@ class LRClass(object):
             gradJ = 0
             for i in range(numObs):
                 RndObs = self.__RandomlySelect(numObs)
-                gradJ = gradJ + (Y[RndObs] - self.__Sigmoid(np.dot(X[RndObs],np.matrix(theta).transpose())))*X[RndObs]
+                gradJ = gradJ + self.__Gradient(X[RndObs], Y[RndObs], theta) #(Y[RndObs] - self.__Sigmoid(np.dot(X[RndObs],np.matrix(theta).transpose())))*X[RndObs]
             gradJ=gradJ/len(X)
             
             alpha_k=step_lenght
@@ -79,7 +86,7 @@ class LRClass(object):
             numEpochs=numEpochs+1
                         
         print('End of training procedure!')
-        if numEpochs >= maX_epochs:
+        if numEpochs >= max_epochs:
             print('Exceeded the maximum number of epochs: %s' %numEpochs)
                 
         return theta,numEpochs,lsq
@@ -93,9 +100,9 @@ class LRClass(object):
         # counter for the number of epochs
         numEpochs=0
                 
-#         mu, sigma = 0, 0.1 # mean and standard deviation
-#         theta = np.random.normal(mu, sigma, numFeat)
-        theta = np.zeros(numFeat)
+        mu, sigma = 0, 0.1 # mean and standard deviation
+        theta = np.random.normal(mu, sigma, numFeat)
+#         theta = np.zeros(numFeat)
         
         lsq=[]
         lsq.append(self.Loss(theta, X, Y))
@@ -113,7 +120,7 @@ class LRClass(object):
                 
                 RndObs = self.__RandomlySelect(numObs)
                 
-                g_k = (Y[RndObs] - self.__Sigmoid(np.dot(X[RndObs],np.matrix(theta).transpose())))*X[RndObs]
+                g_k = self.__Gradient(X[RndObs], Y[RndObs], theta) #(Y[RndObs] - self.__Sigmoid(np.dot(X[RndObs],np.matrix(theta).transpose())))*X[RndObs]
 
                 alpha_k=step_lenght/(np.sqrt((i+1)*(numEpochs)))
                 
@@ -133,11 +140,9 @@ class LRClass(object):
     def valid(self,theta,X,Y):
         #number of observations: must be disposed bY rows
         numObs = len(X)
-        
         success=0
         for i in range(numObs):
-                p = self.__Sigmoid(np.dot(X[i],np.matrix(theta).transpose()))
-                prediction = self.__Predict(p)
+                prediction = self.__Predict(X[i],theta)
                 if  prediction == Y[i]:
                     success = success+1
         

@@ -65,7 +65,8 @@ def LinearLeastSquaresTest(Xtrain,Ytrain,Xtest,Ytest):
     print('Starting training procedure...')
     Model,numEpoc, Lsq = LLSHandle.trainStochastisc(stepLen, minThreshold, maxEpoc, Xtrain, Ytrain)
     print('Done!\n')
-    x = [i+1 for i in range(numEpoc)]
+#     x = [i+1 for i in range(numEpoc)]
+    x = [i+1 for i in range(len(Lsq))]
     plt.plot(x, Lsq)
     plt.xlabel('Number of epochs')
     plt.ylabel('Least squares')
