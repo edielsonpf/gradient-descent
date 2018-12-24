@@ -2,117 +2,37 @@
 
 ## Quick start
 
-### Least Squares
+### Running the test script
 
 ```Python
-from GradientDescent.LinearLeastSquares import LLSClass
-import matplotlib.pyplot as plt
 
-def LinearLeastSquaresTest(Xtrain,Ytrain,Xtest,Ytest):
+from Tools import LoadCSV
 
-    ###
-    #
-    #    Observations must be distributed by rows and features by columns
-    # 
-    ###
+from LinearLeastSquaresTest import LinearLeastSquaresTest
 
-    #Loading data from CSV file
-    numObs = len(Xtrain)
-    print ('Number of training observations: %s'%numObs) 
-    numFeat = len(Xtrain.T)
-    print ('Number of features: %s'%numFeat)
+from LogisticRegressionTest import LogisticRegressionTest
 
-    ###########################
-    #
-    #       BATCH
-    #
-    ###########################
+###
+#
+#    Observations must be distributed by rows and features by columns
+# 
+###
 
-    print('Batch training procedure')
-    stepLen = 1.0/32
-    minThreshold=1e-5
-    maxEpoc = 10
+TEST_LEAST_SQUARES = 1
+TEST_LOGISTIC_REGRESSION = 1
 
-    LLSHandle = LLSClass()
-    
-    print('Starting training procedure...')
+#Loading data from CSV file
+Xtrain = LoadCSV('data/Xtrain.csv', 50)
+Ytrain = LoadCSV('data/Ytrain.csv', 1)
 
-    Model,numEpoc, Lsq = LLSHandle.trainBatch(stepLen, minThreshold, maxEpoc, Xtrain, Ytrain)
+Xtest = LoadCSV('data/Xtest.csv', 50)
+Ytest = LoadCSV('data/Ytest.csv', 1)
 
-    print('Done!\n')
+if TEST_LEAST_SQUARES == 1:
+    print('Batch gradient descent algorithm \n')
+    LinearLeastSquaresTest(Xtrain, Ytrain, Xtest, Ytest)
 
-    x = [i+1 for i in range(numEpoc)]
-
-    plt.plot(x, Lsq)
-
-    plt.xlabel('Number of epochs')
-
-    plt.ylabel('Least squares')
-
-    plt.title('Training history')
-
-    plt.show()
-
-    #Loading data from CSV file
-
-    numObs = len(Xtest)
-    print ('Number of training observations: %s'%numObs) 
-    numFeat = len(Xtest.T)
-    print ('Number of features: %s'%numFeat)
-
-    print('Validating model...')
-
-    percentage,success,errors = LLSHandle.valid(Model, Xtest, Ytest)
-
-    print('Number of observations classified correctly: %g'%success)
-
-    print('Number of observations classified wrongly: %g'%errors)
-
-    print('Percentage correctly classified: %g '%percentage)
-
-    ###########################
-    #
-    #       STOCHASTIC
-    #
-    ###########################
-
-    print('Stochastic training procedure')
-    stepLen = 1.0/128
-    minThreshold=1e-8
-    maxEpoc = 10
-
-    print('Starting training procedure...')
-
-    Model,numEpoc, Lsq = LLSHandle.trainStochastisc(stepLen, minThreshold, maxEpoc, Xtrain, Ytrain)
-
-    print('Done!\n')
-
-    x = [i+1 for i in range(len(Lsq))]
-
-    plt.plot(x, Lsq)
-
-    plt.xlabel('Number of epochs')
-
-    plt.ylabel('Least squares')
-
-    plt.title('Training history')
-
-    plt.show()
-
-    
-    numObs = len(Xtest)
-    print ('Number of training observations: %s'%numObs) 
-    numFeat = len(Xtest.T)
-    print ('Number of features: %s'%numFeat)
-   
-
-    print('Validating model...')
-
-    percentage,success,errors = LLSHandle.valid(Model, Xtest, Ytest)
-
-    print('Number of observations classified correctly: %g'%success)
-
-    print('Number of observations classified wrongly: %g'%errors)
-
-    print('Percentage correctly classified: %g '%percentage)
+if TEST_LOGISTIC_REGRESSION == 1:
+    print('Stochastic gradient descent algorithm \n')
+    LogisticRegressionTest(Xtrain, Ytrain, Xtest, Ytest)
 ```
