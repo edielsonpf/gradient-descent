@@ -7,9 +7,7 @@
 ```Python
 
 from Tools import LoadCSV
-
 from LinearLeastSquaresTest import LinearLeastSquaresTest
-
 from LogisticRegressionTest import LogisticRegressionTest
 
 ###
