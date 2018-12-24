@@ -1,4 +1,4 @@
-#gradient-descent
+# gradient-descent
 
 ## Quick start
 
